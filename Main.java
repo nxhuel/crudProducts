@@ -1,10 +1,23 @@
+import src.Catalog;
+import src.CatalogService;
+import src.Product;
 import src.ProductService;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+
+
     public static void main(String[] args) {
         Scanner entrada = new Scanner(System.in);
-        ProductService productService = new ProductService();
+
+        ArrayList<Catalog> catalogs = new ArrayList<>();
+
+        CatalogService catalogService = new CatalogService(catalogs);
+
+        ProductService productService = new ProductService(catalogs);
+
 
         System.out.println("--- Bienvenido administrador ---");
 
@@ -12,41 +25,50 @@ public class Main {
 
         while (salida != 'n') {
             System.out.println("> Digitalice la opcion que desee: ");
-            System.out.println("1. Visualizar catalogos");
-            System.out.println("2. Visualizar productos");
-            System.out.println("3. Agregar catalogos");
-            System.out.println("4. Agregar productos");
-            System.out.println("5. Modificar catalogos");
-            System.out.println("6. Modificar productos");
-            System.out.println("7. Eliminar catalogos");
-            System.out.println("8. Eliminar productos");
+            System.out.println("1. Visualizar catalogo");
+            System.out.println("2. Agregar catalogo");
+            System.out.println("3. Modificar catalogo");
+            System.out.println("4. Eliminar catalogo");
+            System.out.println("---------------------------------");
+            if (catalogService.hasCatalogs()) {
+                System.out.println("5. Visualizar producto");
+                System.out.println("6. Agregar producto");
+                System.out.println("7. Modificar producto");
+                System.out.println("8. Eliminar producto");
+                System.out.println("---------------------------------");
+                System.out.println("9. Visualizar todo");
+            }
 
             int opcion = entrada.nextInt();
+            entrada.nextLine();
 
             switch (opcion) {
                 case 1:
-                    System.out.println("En proceso...");
+                    catalogService.getCatalog();
                     break;
                 case 2:
-                    productService.getProduct();
+                    catalogService.addCatalog();
                     break;
                 case 3:
-                    System.out.println("En proceso...");
+                    catalogService.putCatalog();
                     break;
                 case 4:
-                    productService.addProduct();
+                    catalogService.deleteCatalog();
                     break;
                 case 5:
-                    System.out.println("En proceso...");
+                    productService.getProduct();
                     break;
                 case 6:
-                    productService.putProduct();
+                    productService.addProduct();
                     break;
                 case 7:
-                    System.out.println("En proceso...");
+                    productService.putProduct();
                     break;
                 case 8:
                     productService.deleteProduct();
+                    break;
+                case 9:
+                    getAll(catalogService, productService);
                     break;
                 default:
                     System.out.println("Opción no válida");
@@ -58,5 +80,18 @@ public class Main {
         }
 
         System.out.println("Programa finalizado");
+    }
+
+    public static void getAll(CatalogService catalogService, ProductService productService) {
+
+        System.out.println("--- Catalogos ---");
+        ArrayList<Catalog> catalogs = catalogService.getCatalog();
+
+        System.out.println("--- Catalogos ---");
+        ArrayList<Product> products = productService.getProduct();
+
+        if (products.size() == 0 || catalogs.size() == 0) {
+            System.out.println("No hay nada que mostrar");
+        }
     }
 }

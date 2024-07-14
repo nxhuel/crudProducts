@@ -7,39 +7,63 @@ public class ProductService {
     Scanner scanner = new Scanner(System.in);
 
     private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Catalog> catalogs;
+
+    public ProductService(ArrayList<Catalog> catalogs) {
+        this.catalogs = catalogs;
+    }
 
     //    Agregar productos
     public void addProduct() {
         System.out.println("--- Agregue producto al stock ---");
 
-        System.out.println("Digitalice el nombre: ");
-        String nameProduct = scanner.nextLine();
-        System.out.println("Digitalice el numero de catalogo: ");
-        int catalogProduct = scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Digitalice la descripcion: ");
-        String descriptionProduct = scanner.nextLine();
-        System.out.println("Digitalice la cantidad: ");
-        int totalProduct = scanner.nextInt();
-        System.out.println("Digitalice el precio: ");
-        float priceProduct = scanner.nextFloat();
-        scanner.nextLine();
+        if (catalogs.size() > 0) {
+            System.out.println("Digitalice el nombre: ");
+            String nameProduct = scanner.nextLine();
+            System.out.println("Digitalice el numero de catalogo: ");
+            int catalogProduct = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Digitalice la descripcion: ");
+            String descriptionProduct = scanner.nextLine();
+            System.out.println("Digitalice la cantidad: ");
+            int totalProduct = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Digitalice el precio: ");
+            float priceProduct = scanner.nextFloat();
+            scanner.nextLine();
 
-        Product newProduct = new Product();
-        newProduct.setId(products.size() + 1);
-        newProduct.setName(nameProduct);
-        newProduct.setCatalogId(catalogProduct);
-        newProduct.setDescription(descriptionProduct);
-        newProduct.setTotal(totalProduct);
-        newProduct.setPrice(priceProduct);
+            Catalog catalog = findCatalogById(catalogProduct);
+            if (catalog != null) {
+                Product newProduct = new Product();
+                newProduct.setId(products.size() + 1);
+                newProduct.setName(nameProduct);
+                newProduct.setCatalogId(catalogProduct);
+                newProduct.setDescription(descriptionProduct);
+                newProduct.setTotal(totalProduct);
+                newProduct.setPrice(priceProduct);
 
-        products.add(newProduct);
+                products.add(newProduct);
 
-        System.out.println("Producto agregado correctamente.");
+                System.out.println("Producto agregado correctamente.");
+            } else {
+                System.out.println("No existe el catalogo con ese ID");
+            }
+        } else {
+            System.out.println("No hay catálogos disponibles. Agregue un catálogo primero.");
+        }
+    }
+
+    private Catalog findCatalogById(int id) {
+        for (Catalog catalog : catalogs) {
+            if (catalog.getId() == id) {
+                return catalog;
+            }
+        }
+        return null;
     }
 
     //    Visualizar productos
-    public void getProduct() {
+    public ArrayList<Product> getProduct() {
         if (products.size() == 0 || products == null) {
             System.out.println("No hay productos que mostrar");
         } else {
@@ -52,6 +76,7 @@ public class ProductService {
                         ", Precio: " + product.getPrice());
             }
         }
+        return products;
     }
 
     //    Eliminar productos
@@ -66,7 +91,7 @@ public class ProductService {
                 products.clear();
                 System.out.println("Se elimino correctamente");
             } else if (deleteOption == 2) {
-                System.out.println("Digitalice el ID del producto que desee eliminar");
+                System.out.println("Digitalice el ID del producto que desee eliminar: ");
                 int deleteId = scanner.nextInt();
                 boolean found = false;
 
@@ -89,12 +114,15 @@ public class ProductService {
         }
     }
 
+    //    Modificar producto
     public void putProduct() {
         if (products.size() == 0 || products == null) {
             System.out.println("No hay productos que modificar");
         } else {
-            System.out.println("Digitalice el ID del producto que desee modificar");
+            System.out.println("Digitalice el ID del producto que desee modificar: ");
             int putId = scanner.nextInt();
+            scanner.nextLine();
+
             boolean found = false;
 
             for (Product product : products) {
@@ -106,19 +134,18 @@ public class ProductService {
                     scanner.nextLine();
                     System.out.println("Digitalice la nueva descripcion: ");
                     String newDescriptionProduct = scanner.nextLine();
-                    System.out.println("Digite el nuevo precio: ");
-                    float newPrice = scanner.nextFloat();
-                    scanner.nextLine();
                     System.out.println("Digite la nueva cantidad: ");
                     int newTotal = scanner.nextInt();
                     scanner.nextLine();
-
+                    System.out.println("Digite el nuevo precio: ");
+                    float newPrice = scanner.nextFloat();
+                    scanner.nextLine();
 
                     product.setName(newName);
                     product.setCatalogId(newCatalogProduct);
                     product.setDescription(newDescriptionProduct);
-                    product.setPrice(newPrice);
                     product.setTotal(newTotal);
+                    product.setPrice(newPrice);
 
                     found = true;
                     System.out.println("Producto con ID " + putId + " ha sido modificado.");
