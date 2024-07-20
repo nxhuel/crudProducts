@@ -27,7 +27,7 @@ public class CatalogService {
     }
 
     public ArrayList<Catalog> getCatalog() {
-        if (catalogs.size() == 0) {
+        if (catalogs.size() == 0 || catalogs == null) {
             System.out.println("No hay catalogos para mostrar.");
         } else {
             for (Catalog catalog : catalogs) {
@@ -105,5 +105,4 @@ public class CatalogService {
             }
         }
     }
-
 }

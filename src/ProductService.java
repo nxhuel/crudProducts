@@ -9,6 +9,8 @@ public class ProductService {
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Catalog> catalogs;
 
+//    CatalogService catalogService = new CatalogService();
+
     public ProductService(ArrayList<Catalog> catalogs) {
         this.catalogs = catalogs;
     }
@@ -21,6 +23,9 @@ public class ProductService {
             System.out.println("Digitalice el nombre: ");
             String nameProduct = scanner.nextLine();
             System.out.println("Digitalice el numero de catalogo: ");
+            for (Catalog catalogIndex : catalogs) {
+                System.out.println("ID: " + catalogIndex.getId() + ", nombre: " + catalogIndex.getName());
+            }
             int catalogProduct = scanner.nextInt();
             scanner.nextLine();
             System.out.println("Digitalice la descripcion: ");
@@ -51,6 +56,11 @@ public class ProductService {
         } else {
             System.out.println("No hay catálogos disponibles. Agregue un catálogo primero.");
         }
+    }
+
+
+    public boolean hasProducts() {
+        return !products.isEmpty();
     }
 
     private Catalog findCatalogById(int id) {

@@ -1,23 +1,14 @@
-import src.Catalog;
-import src.CatalogService;
-import src.Product;
-import src.ProductService;
+package src;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class AdminInterface {
 
-
-    public static void main(String[] args) {
+    public static void adminInter(CatalogService catalogService, ProductService productService) {
         Scanner entrada = new Scanner(System.in);
 
-        ArrayList<Catalog> catalogs = new ArrayList<>();
-
-        CatalogService catalogService = new CatalogService(catalogs);
-
-        ProductService productService = new ProductService(catalogs);
-
+        AdminMain adminMain = new AdminMain(catalogService, productService);
 
         System.out.println("--- Bienvenido administrador ---");
 
@@ -37,6 +28,8 @@ public class Main {
                 System.out.println("8. Eliminar producto");
                 System.out.println("---------------------------------");
                 System.out.println("9. Visualizar todo");
+                System.out.println("---------------------------------");
+                System.out.println();
             }
 
             int opcion = entrada.nextInt();
@@ -75,11 +68,26 @@ public class Main {
                     break;
             }
 
-            System.out.println("¿Desea continuar? (y/n): ");
+            System.out.println();
+            System.out.println("--- ¿Desea continuar? (y/n) ---");
             salida = entrada.next().charAt(0);
         }
 
-        System.out.println("Programa finalizado");
+        System.out.println();
+        System.out.println("Desea ir al inicio? (y/n):  ");
+        char option = entrada.next().charAt(0);
+
+        if (option == 'y') {
+            adminMain.runApplication();
+        } else if (option == 'n') {
+            System.out.println("Programa finalizado");
+            System.exit(0);
+        } else {
+            System.out.println("Opcion no valida.");
+            System.out.println("Programa finalizado");
+            System.exit(0);
+        }
+
     }
 
     public static void getAll(CatalogService catalogService, ProductService productService) {
@@ -87,7 +95,7 @@ public class Main {
         System.out.println("--- Catalogos ---");
         ArrayList<Catalog> catalogs = catalogService.getCatalog();
 
-        System.out.println("--- Catalogos ---");
+        System.out.println("--- Productos ---");
         ArrayList<Product> products = productService.getProduct();
 
         if (products.size() == 0 || catalogs.size() == 0) {
